@@ -81,11 +81,18 @@ const deleteTodo = (id) => {
     .join("");
 };
 
+const deleteAllTodo = () => {
+  todos = [];
+  todo.innerHTML = "";
+};
+
 add.onclick = () => {
   addTodo(activity.value);
   activity.value = "";
 };
-
+remove.onclick = () => {
+  deleteAllTodo();
+};
 todo.addEventListener("click", (e) => {
   console.log(e.target.id);
   if (e.target.id.split("-")[0] == "delete")
