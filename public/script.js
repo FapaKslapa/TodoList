@@ -6,8 +6,12 @@ let todos = [];
 const templateButton = `<li>
   <div class="row justify-content-end">
       <div class="col">%TAG %TITLE %TAG</div>
-      <div class="col-auto"><button type="button" class="btn btn-outline-success %ATTRIBUTO" id="done-%ID">Done</button></div>
-      <div class="col-auto"><button type="button" class="btn btn-outline-danger" id="delete-%ID">Delete</button></div>
+      <div class="col-auto"><button type="button" class="btn btn-outline-success d-inline-flex p-1 rounded-3 %ATTRIBUTO" id="done-%ID">Done <span class="material-icons">
+      done
+      </span></button></div>
+      <div class="col-auto"><button type="button" class="btn btn-outline-danger d-inline-flex p-1 rounded-3" id="delete-%ID">Delete <span class="material-icons">
+      delete
+      </span></button></div>
   </div>
 </li>`;
 const addTodo = (name) => {
