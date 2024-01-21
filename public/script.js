@@ -45,7 +45,6 @@ const displayTodo = (todos, todo) => {
           .replace(/%TAG/g, "")
           .replace(/TAG/g, "")
           .replace(/%ATTRIBUTO/g, "");
-        console.log(stringa);
       }
       return stringa;
     })
@@ -103,7 +102,6 @@ remove.onclick = () => {
   deleteAllTodo();
 };
 todo.addEventListener("click", (e) => {
-  console.log(e.target.id);
   if (e.target.id.split("-")[0] == "delete") {
     deleteTodo(e.target.id.split("-")[1], todos, todo);
   } else if (e.target.id.split("-")[0] == "done") {
