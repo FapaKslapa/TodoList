@@ -26,27 +26,57 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-3 mb-lg-0">
                         <li class="nav-item">
-                            <button type="button" class="btn btn-danger nav-link d-inline-flex p-2" id="remove">Elimina
+                            <button type="button" class="btn btn-danger nav-link d-inline-flex p-2 rounded-3"
+                                id="remove">Elimina
                                 Lista <span alt="clear" class="material-icons">clear</span>
 
                             </button>
                         </li>
                         <li class="nav-item">
+                            <button type="button" class="btn btn-success nav-link d-inline-flex p-2 rounded-3"
+                                id="doneAll">Completa tutti<span alt="done_all" class="material-icons">done_all</span>
 
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="btn btn-primary nav-link d-inline-flex p-2 rounded-3" type="button"
+                                data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" id="openDone">
+                                Apri completati <span class="material-icons">
+                                    task_alt
+                                </span>
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="btn btn-info nav-link d-inline-flex p-2 rounded-3" type="button"
+                                data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" id="openProgress">
+                                Apri in corso <span class="material-icons">
+                                    published_with_changes
+                                </span>
+                            </button>
                         </li>
 
                     </ul>
                     <form class="d-flex" onsubmit="return false">
                         <input class="form-control me-2" type="text" id="activity" placeholder="Inserisci attività">
-                        <button type="submit" class="btn btn-outline-success d-inline-flex p-2" id="add">Aggiungi <span alt="add"
-                                class="material-icons">add</span></button>
+                        <button type="submit" class="btn btn-outline-success d-inline-flex p-2" id="add">Aggiungi <span
+                                alt="add" class="material-icons">add</span></button>
                     </form>
                 </div>
             </div>
         </nav>
         <br>
-        <ul id="todo">
-        </ul>
+        <div class="card card-body">
+            <ul id="todo">
+            </ul>
+        </div>
+        <div class="offcanvas offcanvas-start rounded-4" tabindex="-1" id="offacanvas">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offCanvasTitle">Offcanvas</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body" id="offCanvasBody">
+            </div>
+        </div>
     </div>
     <script type="module" src="./script.js"></script>
 </body>
