@@ -8,3 +8,7 @@ h1 {
   font-size: 2.5em;
   text-align: center;
 }
+
+.offcanvas {
+  --bs-offcanvas-width: 60vh;
+}
