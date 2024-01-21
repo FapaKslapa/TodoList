@@ -88,14 +88,4 @@ doneAll.onclick = () => {
 
 openDone.onclick = () => {
   offCanvasTitle.innerHTML = "Completati";
-  offCanvasBody.innerHTML = todos
-    .filter((item) => item.completed)
-    .map((item) => {
-      return `<li class="list-group-item d-flex justify-content-between align-items-start">
-        <div class="ms-2 me-auto">
-            <div class="fw-bold">${item.name}</div>
-        </div>
-        </li>`;
-    })
-    .join("");
 };
