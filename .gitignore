@@ -136,3 +136,6 @@ node_modules/
 .npm
 
 # dote
+
+.replit
+replit.nix

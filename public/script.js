@@ -48,7 +48,7 @@ const displayTodo = (todos, todo) => {
       }
       return stringa;
     })
-    .join("");
+    .join("\n");
 };
 const addTodo = (name, todos, todo) => {
   todos.push({
@@ -84,7 +84,6 @@ const displayCompletedTodo = (todos, todo) => {
     })
     .join("");
 };
-
 const displayProgressTodo = (todos, todo) => {
   todo.innerHTML = todos
     .map((item) => {
@@ -108,16 +107,13 @@ todo.addEventListener("click", (e) => {
     doneTodo(e.target.id.split("-")[1], todos, todo);
   }
 });
-
 doneAll.onclick = () => {
   completeAllTodo(todos, todo);
 };
-
 openDone.onclick = () => {
   offCanvasTitleDone.innerHTML = "Completati";
   displayCompletedTodo(todos, offCanvasBodyDone);
 };
-
 openProgress.onclick = () => {
   offCanvasTitleProgress.innerHTML = "In corso";
   displayProgressTodo(todos, offCanvasBodyProgress);
