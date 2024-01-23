@@ -15,12 +15,12 @@ let todos = [];
 const templateButton = `<li>
   <div class="row justify-content-end">
       <div class="col %TAG"><p> %TITLE</p></div>
-      <div class="col-auto"><button type="button" class="btn btn-outline-success d-inline-flex p-1 rounded-3 %ATTRIBUTO" id="done-%ID">Done <span class="material-icons">
-      done
-      </span></button></div>
-      <div class="col-auto"><button type="button" class="btn btn-outline-danger d-inline-flex p-1 rounded-3" id="delete-%ID">Delete <span class="material-icons">
-      delete
-      </span></button></div>
+      <div class="col-auto"><button type="button" class="btn btn-outline-success d-inline-flex p-1 rounded-3 %ATTRIBUTO" id="done-%ID">Done <span class="material-symbols-rounded">
+done
+</span></button></div>
+      <div class="col-auto"><button type="button" class="btn btn-outline-danger d-inline-flex p-1 rounded-3" id="delete-%ID">Delete <span class="material-symbols-rounded">
+delete
+</span></button></div>
   </div>
 </li>`;
 
@@ -51,7 +51,7 @@ const displayTodo = (todos, todo) => {
     .join("\n");
 };
 const addTodo = (name, todos, todo) => {
-  todos.push({
+  send({
     name: name,
     completed: false,
   });
@@ -93,7 +93,33 @@ const displayProgressTodo = (todos, todo) => {
     })
     .join("");
 };
+
+const send = (todo) => {
+  fetch("/todo/add", {
+    method: "POST",
+    headers: {
+      "content-Type": "application/json",
+    },
+    body: JSON.stringify(todo),
+  })
+    .then((element) => element.json())
+    .then((element) => console.log(element))
+    .catch((error) => console.error(error));
+};
+
+const load = () => {
+  return new Promise((resolve, reject) => {
+    fetch("/todo")
+      .then((response) => response.json())
+      .then((json) => {
+        console.log(json);
+        resolve(json);
+      });
+  });
+};
+
 add.onclick = () => {
+  send();
   addTodo(activity.value, todos, todo);
   activity.value = "";
 };
