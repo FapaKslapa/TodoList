@@ -59,12 +59,12 @@ const displayTodo = (todos, todo) => {
         const id = button.id.replace("delete-", "");
         todos = todos.filter((todo) => todo.id !== id);
       }
-      if (button.id.indexOf("success-") != -1) {
-        const id = button.id.replace("success-", "");
+
+      if (button.id.indexOf("done-") != -1) {
+        const id = button.id.replace("done-", "");
         todos = todos.map((todo) => {
           if (todo.id === id) {
-            console.log(id);
-            doneTodo(id, todos, todo);
+            todo.completed = true;
           }
           return todo;
         });
@@ -82,13 +82,11 @@ const addTodo = (name, todos, todo) => {
   });
   load().then((data) => {
     console.log(data);
-    todos = data.todos;
     displayTodo(data.todos, todo);
   });
 };
 const doneTodo = (id, todos, todo) => {
   todos[id].completed = true;
-  // displayTodo(todos, todo);
 };
 const deleteTodo = (id, todos, todo) => {
   todos.splice(id, 1);
@@ -179,7 +177,11 @@ openProgress.onclick = () => {
 setInterval(() => {
   load().then((data) => {
     console.log(data);
-    todos = data.todos;
     displayTodo(data.todos, todo);
   });
-}, 300000); // 300000 millisecondi equivalgono a 5 minuti
+}, 300000);
+
+load().then((data) => {
+  console.log(data);
+  displayTodo(data.todos, todo);
+});

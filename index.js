@@ -25,6 +25,23 @@ app.post("/todo/add", (req, res) => {
   }
 });
 
+app.put("/todo/complete", (req, res) => {
+  const id = req.body.id;
+  if (!id) {
+    res.status(400).json({ error: "ID del todo mancante" });
+    return;
+  }
+
+  const index = todos.findIndex((todo) => todo.id === id);
+  if (index === -1) {
+    res.status(404).json({ error: "Todo non trovato" });
+    return;
+  }
+
+  todos[index].complete = true;
+  res.json({ success: true });
+});
+
 app.post("/todo/delete", (req, res) => {
   const id = req.body.id;
   if (!id) {
