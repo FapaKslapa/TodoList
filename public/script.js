@@ -6,7 +6,7 @@ const activity = document.getElementById("activity");
 const offCanvasTitleDone = document.getElementById("offCanvasTitleDone");
 const offCanvasBodyDone = document.getElementById("offCanvasBodyDone");
 const offCanvasTitleProgress = document.getElementById(
-  "offCanvasTitleProgress",
+  "offCanvasTitleProgress"
 );
 const offCanvasBodyProgress = document.getElementById("offCanvasBodyProgress");
 const openDone = document.getElementById("openDone");
@@ -15,10 +15,10 @@ let todos = [];
 const templateButton = `<li>
   <div class="row justify-content-end">
       <div class="col %TAG"><p> %TITLE</p></div>
-      <div class="col-auto"><button type="button" class="btn btn-outline-success d-inline-flex p-1 rounded-3 %ATTRIBUTO" id="done-%ID">Done <span class="material-symbols-rounded">
+      <div class="col-auto"><button type="button" class="btn btn-outline-success d-inline-flex p-1 rounded-3 todo %ATTRIBUTO" id="done-%ID">Done <span class="material-symbols-rounded">
 done
 </span></button></div>
-      <div class="col-auto"><button type="button" class="btn btn-outline-danger d-inline-flex p-1 rounded-3" id="delete-%ID">Delete <span class="material-symbols-rounded">
+      <div class="col-auto"><button type="button" class="btn btn-outline-danger d-inline-flex p-1 rounded-3 todo" id="delete-%ID">Delete <span class="material-symbols-rounded">
 delete
 </span></button></div>
   </div>
@@ -35,7 +35,9 @@ const displayTodo = (todos, todo) => {
     .map((item) => {
       let stringa = templateButton
         .replace(/%TITLE/g, item.name)
-        .replace(/%ID/g, todos.indexOf(item));
+        .replace(/%ID/g, item.id)
+        .replace(/%ID/g, item.id);
+      console.log(item.id);
       if (item.completed) {
         stringa = stringa
           .replace(/%TAG/g, "text-decoration-line-through")
@@ -49,17 +51,44 @@ const displayTodo = (todos, todo) => {
       return stringa;
     })
     .join("\n");
+
+  const buttonList = document.querySelectorAll(".todo");
+  buttonList.forEach((button) => {
+    button.onclick = () => {
+      if (button.id.indexOf("delete-") != -1) {
+        const id = button.id.replace("delete-", "");
+        todos = todos.filter((todo) => todo.id !== id);
+      }
+      if (button.id.indexOf("success-") != -1) {
+        const id = button.id.replace("success-", "");
+        todos = todos.map((todo) => {
+          if (todo.id === id) {
+            console.log(id);
+            doneTodo(id, todos, todo);
+          }
+          return todo;
+        });
+      }
+      displayTodo(todos, todo);
+    };
+  });
 };
 const addTodo = (name, todos, todo) => {
   send({
-    name: name,
-    completed: false,
+    todo: {
+      name: name,
+      completed: false,
+    },
   });
-  displayTodo(todos, todo);
+  load().then((data) => {
+    console.log(data);
+    todos = data.todos;
+    displayTodo(data.todos, todo);
+  });
 };
 const doneTodo = (id, todos, todo) => {
   todos[id].completed = true;
-  displayTodo(todos, todo);
+  // displayTodo(todos, todo);
 };
 const deleteTodo = (id, todos, todo) => {
   todos.splice(id, 1);
@@ -98,13 +127,15 @@ const send = (todo) => {
   fetch("/todo/add", {
     method: "POST",
     headers: {
-      "content-Type": "application/json",
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(todo),
   })
-    .then((element) => element.json())
-    .then((element) => console.log(element))
-    .catch((error) => console.error(error));
+    .then((response) => response.json())
+    .then((data) => console.log(data))
+    .catch((error) => {
+      console.error("Error:", error);
+    });
 };
 
 const load = () => {
@@ -112,20 +143,19 @@ const load = () => {
     fetch("/todo")
       .then((response) => response.json())
       .then((json) => {
-        console.log(json);
         resolve(json);
       });
   });
 };
 
 add.onclick = () => {
-  send();
   addTodo(activity.value, todos, todo);
   activity.value = "";
 };
 remove.onclick = () => {
   deleteAllTodo();
 };
+/*
 todo.addEventListener("click", (e) => {
   if (e.target.id.split("-")[0] == "delete") {
     deleteTodo(e.target.id.split("-")[1], todos, todo);
@@ -133,6 +163,7 @@ todo.addEventListener("click", (e) => {
     doneTodo(e.target.id.split("-")[1], todos, todo);
   }
 });
+*/
 doneAll.onclick = () => {
   completeAllTodo(todos, todo);
 };
@@ -144,3 +175,11 @@ openProgress.onclick = () => {
   offCanvasTitleProgress.innerHTML = "In corso";
   displayProgressTodo(todos, offCanvasBodyProgress);
 };
+
+setInterval(() => {
+  load().then((data) => {
+    console.log(data);
+    todos = data.todos;
+    displayTodo(data.todos, todo);
+  });
+}, 300000); // 300000 millisecondi equivalgono a 5 minuti
