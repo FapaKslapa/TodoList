@@ -9,7 +9,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/", express.static(path.join(__dirname, "public")));
 
-const todos = [];
+let todos = [];
 
 app.post("/todo/add", (req, res) => {
   const singleTodo = req.body;
@@ -26,37 +26,23 @@ app.post("/todo/add", (req, res) => {
 });
 
 app.put("/todo/complete", (req, res) => {
-  const id = req.body.id;
-  if (!id) {
-    res.status(400).json({ error: "ID del todo mancante" });
-    return;
+  const todo = req.body;
+  try {
+    todos = todos.map((element) => {
+      if (element.id === todo.id) {
+        element.completed = true;
+      }
+      return element;
+    });
+  } catch (e) {
+    console.log(e);
   }
-
-  const index = todos.findIndex((todo) => todo.id === id);
-  if (index === -1) {
-    res.status(404).json({ error: "Todo non trovato" });
-    return;
-  }
-
-  todos[index].complete = true;
-  res.json({ success: true });
+  res.json({ result: "Ok" });
 });
 
-app.post("/todo/delete", (req, res) => {
-  const id = req.body.id;
-  if (!id) {
-    res.status(400).json({ error: "ID del todo mancante" });
-    return;
-  }
-
-  const index = todos.findIndex((todo) => todo.id === id);
-  if (index === -1) {
-    res.status(404).json({ error: "Todo non trovato" });
-    return;
-  }
-
-  todos.splice(index, 1);
-  res.json({ success: true });
+app.delete("/todo/:id", (req, res) => {
+  todos = todos.filter((element) => element.id !== req.params.id);
+  res.json({ result: "Ok" });
 });
 
 app.get("/todo", (req, res) => {

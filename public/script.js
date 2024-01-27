@@ -6,7 +6,7 @@ const activity = document.getElementById("activity");
 const offCanvasTitleDone = document.getElementById("offCanvasTitleDone");
 const offCanvasBodyDone = document.getElementById("offCanvasBodyDone");
 const offCanvasTitleProgress = document.getElementById(
-  "offCanvasTitleProgress"
+  "offCanvasTitleProgress",
 );
 const offCanvasBodyProgress = document.getElementById("offCanvasBodyProgress");
 const openDone = document.getElementById("openDone");
@@ -57,16 +57,27 @@ const displayTodo = (todos, todo) => {
     button.onclick = () => {
       if (button.id.indexOf("delete-") != -1) {
         const id = button.id.replace("delete-", "");
-        todos = todos.filter((todo) => todo.id !== id);
+        deleteTodo(id).then((data) => {
+          load().then((data) => {
+            console.log(data);
+            displayTodo(data.todos, todo);
+          });
+        });
       }
-
       if (button.id.indexOf("done-") != -1) {
         const id = button.id.replace("done-", "");
-        todos = todos.map((todo) => {
-          if (todo.id === id) {
-            todo.completed = true;
+        const element = todos.map((element) => {
+          if (element.id === todo.id) {
+            element.completed = true;
           }
-          return todo;
+          return element;
+        });
+        console.log(element);
+        completeTodo(element).then((data) => {
+          load().then((data) => {
+            console.log(data);
+            displayTodo(data.todos, todo);
+          });
         });
       }
       displayTodo(todos, todo);
@@ -79,18 +90,43 @@ const addTodo = (name, todos, todo) => {
       name: name,
       completed: false,
     },
-  });
-  load().then((data) => {
-    console.log(data);
-    displayTodo(data.todos, todo);
+  }).then((data) => {
+    load().then((data) => {
+      console.log(data);
+      displayTodo(data.todos, todo);
+    });
   });
 };
-const doneTodo = (id, todos, todo) => {
-  todos[id].completed = true;
+const completeTodo = (todo) => {
+  return new Promise((resolve, reject) => {
+    fetch("/todo/complete", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(todo),
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        resolve(json);
+      });
+  });
 };
-const deleteTodo = (id, todos, todo) => {
-  todos.splice(id, 1);
-  displayTodo(todos, todo);
+
+const deleteTodo = (id) => {
+  return new Promise((resolve, reject) => {
+    fetch("/todo/" + id, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        console.log(json);
+        resolve(json);
+      });
+  });
 };
 const deleteAllTodo = () => {
   todos = [];
@@ -122,18 +158,20 @@ const displayProgressTodo = (todos, todo) => {
 };
 
 const send = (todo) => {
-  fetch("/todo/add", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(todo),
-  })
-    .then((response) => response.json())
-    .then((data) => console.log(data))
-    .catch((error) => {
-      console.error("Error:", error);
-    });
+  return new Promise((resolve, reject) => {
+    fetch("/todo/add", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(todo),
+    })
+      .then((response) => response.json())
+      .then((data) => resolve(data))
+      .catch((error) => {
+        reject("Error:", error);
+      });
+  });
 };
 
 const load = () => {
@@ -153,15 +191,7 @@ add.onclick = () => {
 remove.onclick = () => {
   deleteAllTodo();
 };
-/*
-todo.addEventListener("click", (e) => {
-  if (e.target.id.split("-")[0] == "delete") {
-    deleteTodo(e.target.id.split("-")[1], todos, todo);
-  } else if (e.target.id.split("-")[0] == "done") {
-    doneTodo(e.target.id.split("-")[1], todos, todo);
-  }
-});
-*/
+
 doneAll.onclick = () => {
   completeAllTodo(todos, todo);
 };
