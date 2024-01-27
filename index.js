@@ -30,7 +30,7 @@ app.put("/todo/complete", (req, res) => {
   try {
     todos = todos.map((element) => {
       if (element.id === todo.id) {
-        element.completed = true;
+        return todo;
       }
       return element;
     });
