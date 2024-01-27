@@ -66,14 +66,9 @@ const displayTodo = (todos, todo) => {
       }
       if (button.id.indexOf("done-") != -1) {
         const id = button.id.replace("done-", "");
-        const element = todos.map((element) => {
-          if (element.id === todo.id) {
-            element.completed = true;
-          }
-          return element;
-        });
-        console.log(element);
-        completeTodo(element).then((data) => {
+        let currentTodo = todos.find(todo => todo.id === id);
+        console.log(currentTodo);
+        completeTodo(currentTodo).then((data) => {
           load().then((data) => {
             console.log(data);
             displayTodo(data.todos, todo);
