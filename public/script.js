@@ -37,7 +37,6 @@ const displayTodo = (todos, todo) => {
         .replace(/%TITLE/g, item.name)
         .replace(/%ID/g, item.id)
         .replace(/%ID/g, item.id);
-      console.log(item.id);
       if (item.completed) {
         stringa = stringa
           .replace(/%TAG/g, "text-decoration-line-through")
@@ -59,7 +58,6 @@ const displayTodo = (todos, todo) => {
         const id = button.id.replace("delete-", "");
         deleteTodo(id).then((data) => {
           load().then((data) => {
-            console.log(data);
             displayTodo(data.todos, todo);
           });
         });
@@ -72,7 +70,6 @@ const displayTodo = (todos, todo) => {
         }
         completeTodo(currentTodo).then((data) => {
           load().then((data) => {
-            console.log(data);
             displayTodo(data.todos, todo);
           });
         });
@@ -89,7 +86,6 @@ const addTodo = (name, todos, todo) => {
     },
   }).then((data) => {
     load().then((data) => {
-      console.log(data);
       displayTodo(data.todos, todo);
     });
   });
@@ -109,7 +105,6 @@ const completeTodo = (todo) => {
       });
   });
 };
-
 const deleteTodo = (id) => {
   return new Promise((resolve, reject) => {
     fetch("/todo/" + id, {
@@ -120,7 +115,6 @@ const deleteTodo = (id) => {
     })
       .then((response) => response.json())
       .then((json) => {
-        console.log(json);
         resolve(json);
       });
   });
@@ -203,12 +197,10 @@ openProgress.onclick = () => {
 
 setInterval(() => {
   load().then((data) => {
-    console.log(data);
     displayTodo(data.todos, todo);
   });
 }, 300000);
 
 load().then((data) => {
-  console.log(data);
   displayTodo(data.todos, todo);
 });

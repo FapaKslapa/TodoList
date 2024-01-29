@@ -34,14 +34,16 @@ app.put("/todo/complete", (req, res) => {
       }
       return element;
     });
-  } catch (e) {
-    console.log(e);
-  }
+  } catch (e) {}
   res.json({ result: "Ok" });
 });
 
 app.delete("/todo/:id", (req, res) => {
   todos = todos.filter((element) => element.id !== req.params.id);
+  res.json({ result: "Ok" });
+});
+app.delete("/todo/deleteAll", (req, res) => {
+  todos = [];
   res.json({ result: "Ok" });
 });
 
