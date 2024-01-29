@@ -65,8 +65,3 @@ const server = http.createServer(app);
 server.listen(80, () => {
   console.log("- server running");
 });
-
-app.put("/todo/completeAll", (req, res) => {
-  todos = todos.map((todo) => ({ ...todo, completed: true }));
-  res.json({ result: "Ok" });
-});

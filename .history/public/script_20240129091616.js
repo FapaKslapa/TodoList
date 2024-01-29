@@ -203,7 +203,7 @@ const loadCompleated = () => {
   });
 };
 
-const loadIncomplete = () => {
+const loadIncomplete= () => {
   return new Promise((resolve, reject) => {
     fetch("/todo/incomplete")
       .then((response) => response.json())
@@ -234,15 +234,11 @@ doneAll.onclick = () => {
 };
 openDone.onclick = () => {
   offCanvasTitleDone.innerHTML = "Completati";
-  loadCompleated().then((data) => {
-    displayCompletedTodo(data, offCanvasBodyDone);
-  });
+  displayCompletedTodo(todos, offCanvasBodyDone);
 };
 openProgress.onclick = () => {
   offCanvasTitleProgress.innerHTML = "In corso";
-  loadIncomplete().then((data) => {
-    displayProgressTodo(data, offCanvasBodyProgress);
-  });
+  displayProgressTodo(todos, offCanvasBodyProgress);
 };
 
 setInterval(() => {

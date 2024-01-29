@@ -51,14 +51,9 @@ app.get("/todo", (req, res) => {
   res.json({ todos: todos });
 });
 
-app.get("/todo/incomplete", (req, res) => {
+app.post("/todo/incomplete", (req, res) => {
   const incompleteTodos = todos.filter((todo) => !todo.completed);
   res.json({ todos: incompleteTodos });
-});
-
-app.get("/todo/completed", (req, res) => {
-  const completedTodos = todos.filter((todo) => todo.completed);
-  res.json({ todos: completedTodos });
 });
 
 const server = http.createServer(app);
@@ -66,7 +61,3 @@ server.listen(80, () => {
   console.log("- server running");
 });
 
-app.put("/todo/completeAll", (req, res) => {
-  todos = todos.map((todo) => ({ ...todo, completed: true }));
-  res.json({ result: "Ok" });
-});

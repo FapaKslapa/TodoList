@@ -133,7 +133,7 @@ const deleteAllTodo = () => {
       });
   });
 };
-const completeAllTodo = () => {
+const completeAllTodo = (todos, todo) => {
   return new Promise((resolve, reject) => {
     fetch("/todo/completeAll", {
       method: "PUT",
@@ -193,26 +193,6 @@ const load = () => {
   });
 };
 
-const loadCompleated = () => {
-  return new Promise((resolve, reject) => {
-    fetch("/todo/completed")
-      .then((response) => response.json())
-      .then((json) => {
-        resolve(json);
-      });
-  });
-};
-
-const loadIncomplete = () => {
-  return new Promise((resolve, reject) => {
-    fetch("/todo/incomplete")
-      .then((response) => response.json())
-      .then((json) => {
-        resolve(json);
-      });
-  });
-};
-
 add.onclick = () => {
   addTodo(activity.value, todos, todo);
   activity.value = "";
@@ -226,23 +206,15 @@ remove.onclick = () => {
 };
 
 doneAll.onclick = () => {
-  completeAllTodo().then((data) => {
-    load().then((data) => {
-      displayTodo(data.todos, todo);
-    });
-  });
+  completeAllTodo(todos, todo);
 };
 openDone.onclick = () => {
   offCanvasTitleDone.innerHTML = "Completati";
-  loadCompleated().then((data) => {
-    displayCompletedTodo(data, offCanvasBodyDone);
-  });
+  displayCompletedTodo(todos, offCanvasBodyDone);
 };
 openProgress.onclick = () => {
   offCanvasTitleProgress.innerHTML = "In corso";
-  loadIncomplete().then((data) => {
-    displayProgressTodo(data, offCanvasBodyProgress);
-  });
+  displayProgressTodo(todos, offCanvasBodyProgress);
 };
 
 setInterval(() => {
